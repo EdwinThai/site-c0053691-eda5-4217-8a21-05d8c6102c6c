@@ -2812,7 +2812,9 @@
     var existing = Array.prototype.filter.call(root.children, function (el) { return el.classList.contains("menu-group"); });
     var cats = [], byCat = {};
     services.forEach(function (s) {
-      var cat = String(s.category || "").trim() || (existing.length === 1 ? groupLabel(existing[0]) : "Övrigt");
+      // a service in a group is listed in the group's own category, wherever the service itself belongs
+      var home = s.group_id && byId[s.group_id] ? String(byId[s.group_id].category || "").trim() : "";
+      var cat = home || String(s.category || "").trim() || (existing.length === 1 ? groupLabel(existing[0]) : "Övrigt");
       var k = cat.toLowerCase();
       if (!byCat[k]) { byCat[k] = []; cats.push(cat); }
       byCat[k].push(s);
